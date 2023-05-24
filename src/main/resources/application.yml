@@ -4,8 +4,8 @@ server:
 eas:
   jwt:
     security:
-      enabled:true
-    timezone: "AmericaBogota"
+      enabled: true
+    timezone: "America/Bogota"
     issuer: "www.estefa.net"
     token:
       auth:
