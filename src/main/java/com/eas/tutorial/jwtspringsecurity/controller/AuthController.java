@@ -1,5 +1,7 @@
 package com.eas.tutorial.jwtspringsecurity.controller;
 
+import com.eas.tutorial.jwtspringsecurity.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
@@ -8,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/demo")
 public class AuthController {
+
+    @Autowired
+    private AuthService authService;
 
     // "/demo/oauth/cliente_credential/accesstoken"
     /*
@@ -30,6 +35,6 @@ public class AuthController {
     */
     @PostMapping(value = "oauth/cliente_credential/accesstoken", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> login(@RequestBody MultiValueMap<String, String> paramMap, @RequestParam("grant_type") String grantType) {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(authService.login(paramMap.getFirst("client_id"), paramMap.getFirst("client_secret")));
     }
 }
