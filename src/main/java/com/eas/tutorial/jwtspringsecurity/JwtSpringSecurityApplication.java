@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @CrossOrigin(origins="*") // para permitir todos los origenes
 @EnableAutoConfiguration
-@EnableConfigurationProperties
+@EnableConfigurationProperties //fundamental
 @SpringBootApplication
 public class JwtSpringSecurityApplication {
 

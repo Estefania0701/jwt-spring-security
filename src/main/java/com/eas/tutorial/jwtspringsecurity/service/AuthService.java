@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     public JwtResponse login(String clientId, String clientSecret){
+        // autentica el cliente y genera un JWT
 
         // objeto jwt
         JwtResponse jwt = JwtResponse.builder()
