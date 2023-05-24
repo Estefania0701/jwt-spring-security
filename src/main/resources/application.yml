@@ -1,2 +1,16 @@
 server:
   port: 8585
+
+eas:
+  jwt:
+    security:
+      enabled:true
+    timezone: "AmericaBogota"
+    issuer: "www.estefa.net"
+    token:
+      auth:
+        path: "/demo/oauth/cliente_credential/accesstoken"
+      secret: "hola este esta es mi clave secreta jeje"
+      expired-in: 3600 #seconds
+    excluded:
+      path: "/demo/multi,/demo/otraexclusion" #ejemplos
