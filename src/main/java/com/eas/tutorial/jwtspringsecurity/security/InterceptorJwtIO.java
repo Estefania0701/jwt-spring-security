@@ -10,7 +10,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import java.util.List;
 
 @Component
-public class Interceptor implements HandlerInterceptor {
+public class InterceptorJwtIO implements HandlerInterceptor {
     /* Un interceptor es un componente que permite interceptar y procesar
     las solicitudes HTTP antes de que lleguen a los controladores de la
     aplicación. En este caso, el interceptor se utiliza para realizar
