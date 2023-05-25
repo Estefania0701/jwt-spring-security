@@ -35,9 +35,25 @@ public class Interceptor implements HandlerInterceptor {
         boolean validate = false;
         String uri = request.getRequestURI();
 
-        // si la ruta está autorizada o es una ruta excluida
+        // ----------- revisar la ruta
+        // si la ruta es de login o si es una ruta excluida
         if (uri.equals(AUTH_PATH) || excluded(uri)) {
             validate = true;
+        }
+
+        // ----------- revisar la expiración del token
+        if (!validate && request.getHeader("Authorization") != null && !request.getHeader("Authorization").isEmpty()) {
+
+            // obtengo el token solito sin "Bearer"
+            String token = request.getHeader("Authorization").replace("Bearer", "");
+
+            // valido si el token ya expiró (true) y convierto a false con ! para invalidarlo
+            validate = !jwtIO.validateToken(token);
+        }
+
+        // ----------- enviar mensaje 401 de no autorizado
+        if (!validate) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401
         }
 
         return validate;
