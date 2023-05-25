@@ -1,6 +1,7 @@
 package com.eas.tutorial.jwtspringsecurity.security;
 
 import com.eas.tutorial.jwtspringsecurity.util.GsonUtil;
+import io.fusionauth.jwt.JWTUtils;
 import io.fusionauth.jwt.Signer;
 import io.fusionauth.jwt.Verifier;
 import io.fusionauth.jwt.domain.JWT;
@@ -68,9 +69,12 @@ public class JwtIO {
         // codifica el string token
 
         // para verificar el token
-        Verifier verifier = HMACVerifier.newVerifier(SECRET);
+        //Verifier verifier = HMACVerifier.newVerifier(SECRET);
 
         // retorna el string token en el formato JWT que necesito
-        return JWT.getDecoder().decode(encodedJWT, verifier);
+        //return JWT.getDecoder().decode(encodedJWT, verifier);
+
+        // tuve que reemplazar lo anterior para solucionar error "The encoded JWT is not properly Base64 encoded"
+        return JWTUtils.decodePayload(encodedJWT);
     }
 }
