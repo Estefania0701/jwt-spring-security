@@ -1,6 +1,8 @@
 package com.eas.tutorial.jwtspringsecurity.controller;
 
+import com.eas.tutorial.jwtspringsecurity.exception.ApiUnauthorized;
 import com.eas.tutorial.jwtspringsecurity.service.AuthService;
+import com.eas.tutorial.jwtspringsecurity.validator.AuthValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,9 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private AuthValidator validator;
 
     // "/demo/oauth/cliente_credential/accesstoken"
     /*
@@ -34,7 +39,9 @@ public class AuthController {
     parámetro de consulta con el nombre "grant_type" y un valor correspondiente.
     */
     @PostMapping(value = "oauth/cliente_credential/accesstoken", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> login(@RequestBody MultiValueMap<String, String> paramMap, @RequestParam("grant_type") String grantType) {
+    public ResponseEntity<Object> login(@RequestBody MultiValueMap<String, String> paramMap, @RequestParam("grant_type") String grantType) throws ApiUnauthorized {
+
+        validator.validate(paramMap, grantType);
 
         // retorna un token para el cliente
         return ResponseEntity.ok(authService.login(paramMap.getFirst("client_id"), paramMap.getFirst("client_secret")));
