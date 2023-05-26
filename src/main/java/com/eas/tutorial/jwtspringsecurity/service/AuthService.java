@@ -1,14 +1,12 @@
 package com.eas.tutorial.jwtspringsecurity.service;
 
-import com.eas.tutorial.jwtspringsecurity.dto.JwtResponse;
+import com.eas.tutorial.jwtspringsecurity.dto.JwtResponseDTO;
 import com.eas.tutorial.jwtspringsecurity.dto.UsuarioDTO;
 import com.eas.tutorial.jwtspringsecurity.security.JwtIO;
 import com.eas.tutorial.jwtspringsecurity.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 public class AuthService {
@@ -22,9 +20,8 @@ public class AuthService {
     @Value("${eas.jwt.token.expired-in}")
     private int EXPIRED_IN;
 
-    public JwtResponse login(String clientId, String clientSecret){
-        // autentica el cliente y genera un JWT
-
+    public JwtResponseDTO login(String clientId, String clientSecret){
+        // genera un JWT
 
         UsuarioDTO user = UsuarioDTO.builder()
                 .name("Estefanía")
@@ -35,7 +32,7 @@ public class AuthService {
                 .build();
 
         // objeto jwt
-        JwtResponse jwt = JwtResponse.builder()
+        JwtResponseDTO jwt = JwtResponseDTO.builder()
                 .tokenType("bearer")
                 .accessToken(jwtIO.generateToken(user))
                 .issuedAt(dateUtil.getDateMillis()+"")

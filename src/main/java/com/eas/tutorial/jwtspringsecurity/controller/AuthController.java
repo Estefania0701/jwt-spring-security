@@ -19,31 +19,15 @@ public class AuthController {
     @Autowired
     private AuthValidator validator;
 
-    // "/demo/oauth/cliente_credential/accesstoken"
-    /*
-    --- consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE: Esta anotación
-    especifica el tipo de medios que el método puede consumir. En este caso,
-    el método espera datos en formato application/x-www-form-urlencoded.
-    (clave1=valor1&clave2=valor2&clave3=valor3...)
-    --- produces = MediaType.APPLICATION_JSON_VALUE: Esta anotación especifica
-    el tipo de medios que el método puede producir. En este caso, el método
-    generará una respuesta en formato JSON.
-    {
-    "clave1": "valor1",
-    "clave2": "valor2",
-    "clave3": "valor3"
-    }
-    --- Toma dos parámetros: paramMap, que representa los datos enviados en
-    el cuerpo de la solicitud y se espera que sea un MultiValueMap que
-    contenga pares clave-valor, y grantType, que se espera que sea un
-    parámetro de consulta con el nombre "grant_type" y un valor correspondiente.
-    */
+    // paramMap representa los datos enviados en el cuerpo de la solicitud (formulario)
+    // grantType para el método de autenticación y autorización (a través de las credenciales del cliente)
     @PostMapping(value = "oauth/cliente_credential/accesstoken", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> login(@RequestBody MultiValueMap<String, String> paramMap, @RequestParam("grant_type") String grantType) throws ApiUnauthorized {
 
+        // valida los parámetros recibidos y lanza excepción si falla
         validator.validate(paramMap, grantType);
 
-        // retorna un token para el cliente
+        // llama al servicio para generar un token
         return ResponseEntity.ok(authService.login(paramMap.getFirst("client_id"), paramMap.getFirst("client_secret")));
     }
 }

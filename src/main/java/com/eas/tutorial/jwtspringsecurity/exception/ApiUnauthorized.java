@@ -8,9 +8,6 @@ public class ApiUnauthorized extends Exception {
     /* cuando se lanza esta excepción, se devuelve una respuesta HTTP
     con el código de estado 401 Unauthorized.*/
 
-    // NECESARIO??
-    //private static final Long serialVersionUID = 5071496619546474611L;
-
     public ApiUnauthorized(String message) {
         super(message);
     }

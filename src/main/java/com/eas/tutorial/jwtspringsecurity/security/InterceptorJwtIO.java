@@ -11,10 +11,6 @@ import java.util.List;
 
 @Component
 public class InterceptorJwtIO implements HandlerInterceptor {
-    /* Un interceptor es un componente que permite interceptar y procesar
-    las solicitudes HTTP antes de que lleguen a los controladores de la
-    aplicación. En este caso, el interceptor se utiliza para realizar
-    validaciones antes de que se maneje una solicitud.*/
 
     @Value("${eas.jwt.token.auth.path}")
     private String AUTH_PATH;
@@ -62,14 +58,14 @@ public class InterceptorJwtIO implements HandlerInterceptor {
     private boolean excluded(String path) {
         // verifica si una ruta está en la lista de rutas excluidas
 
-        boolean result = false;
+        //boolean result = false;
 
         for (String exc : excluded) {
             if (exc.equals("#") && exc.equals(path)) {
-                result = true;
+                return true;
             }
         }
 
-        return result;
+        return false;
     }
 }

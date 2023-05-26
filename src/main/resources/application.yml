@@ -13,6 +13,6 @@ eas:
       auth:
         path: "/demo/oauth/cliente_credential/accesstoken"
       secret: "hola este esta es mi clave secreta jeje"
-      expired-in: 3600 #seconds
+      expired-in: 60 #seconds
     excluded:
       path: "/demo/multi,/demo/otraexclusion" #ejemplos

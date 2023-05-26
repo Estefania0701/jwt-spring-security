@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/demo")
 public class JwtController {
 
-    // ruta no protegida
     @GetMapping("/saludo")
-    public ResponseEntity<Object> saludar() {
+    public ResponseEntity<Object> hello() {
         return ResponseEntity.ok("Hola mundo");
     }
 }

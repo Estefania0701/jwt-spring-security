@@ -3,10 +3,8 @@ package com.eas.tutorial.jwtspringsecurity.security;
 import com.eas.tutorial.jwtspringsecurity.util.GsonUtil;
 import io.fusionauth.jwt.JWTUtils;
 import io.fusionauth.jwt.Signer;
-import io.fusionauth.jwt.Verifier;
 import io.fusionauth.jwt.domain.JWT;
 import io.fusionauth.jwt.hmac.HMACSigner;
-import io.fusionauth.jwt.hmac.HMACVerifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -54,23 +52,21 @@ public class JwtIO {
         // valida si el token ya expiró
 
         JWT jwt = jwt(encodedJWT);
-
         return jwt.isExpired();
     }
 
     public String getPayload(String encodedJWT) {
+        // recibe un token y devuelve el contenido de sub en el payload
 
         JWT jwt = jwt(encodedJWT);
-
         return jwt.subject;
     }
 
     private JWT jwt(String encodedJWT) {
-        // codifica el string token
+        // decodifica el token
 
         // para verificar el token
         //Verifier verifier = HMACVerifier.newVerifier(SECRET);
-
         // retorna el string token en el formato JWT que necesito
         //return JWT.getDecoder().decode(encodedJWT, verifier);
 
