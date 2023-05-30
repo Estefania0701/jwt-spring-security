@@ -16,3 +16,17 @@ eas:
       expired-in: 60 #seconds
     excluded:
       path: "/demo/multi,/demo/otraexclusion" #ejemplos
+
+
+spring:
+  datasource:
+    driver-class-name: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+    url: "jdbc:sqlserver://springsecurity-server.database.windows.net:1433;encrypt=true;trustServerCertificate=false;loginTimeout=30;database=tutorial1;"
+    username: "estefaniaaguas@springsecurity-server"
+    password: "Mocewi63*"
+  jpa:
+    properties:
+      hibernate:
+        dialect: "org.hibernate.dialect.SQLServerDialect"
+    hibernate:
+      dll-auto: "validate"
