@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/demo")
-public class JwtController {
+public class DemoController {
 
     @GetMapping("/saludo")
     public ResponseEntity<Object> hello() {
