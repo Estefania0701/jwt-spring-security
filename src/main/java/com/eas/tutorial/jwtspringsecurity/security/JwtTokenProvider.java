@@ -1,6 +1,7 @@
 package com.eas.tutorial.jwtspringsecurity.security;
 
-import com.eas.tutorial.jwtspringsecurity.dto.UsuarioDTO;
+import com.eas.tutorial.jwtspringsecurity.dto.UserDTO;
+import com.eas.tutorial.jwtspringsecurity.model.User;
 import com.eas.tutorial.jwtspringsecurity.util.UUIDGenerator;
 import io.fusionauth.jwt.JWTUtils;
 import io.fusionauth.jwt.Signer;
@@ -32,7 +33,7 @@ public class JwtTokenProvider {
     @Value("${eas.jwt.issuer:none}")
     private String ISSUER;
 
-    public String generateToken(UsuarioDTO usuario) {
+    public String generateToken(User user) {
         // crea el string del token y lo retorna
 
         String sub = UUIDGenerator.generateUUID(); // identificador único de sesión
@@ -50,11 +51,11 @@ public class JwtTokenProvider {
                 .setIssuer(ISSUER)
                 .setIssuedAt(ZonedDateTime.now(timeZone.toZoneId()))
                 .setSubject(sub)
-                .addClaim("name", usuario.getName())
-                .addClaim("lastname", usuario.getLastname())
-                .addClaim("username", usuario.getUsername())
-                .addClaim("role", usuario.getRole())
-                .addClaim("country", usuario.getCountry())
+                .addClaim("name", user.getName())
+                .addClaim("lastname", user.getLastname())
+                .addClaim("username", user.getUsername())
+                .addClaim("authorities", user.getAuthorities())
+                .addClaim("country", user.getCountry())
                 .setExpiration(zonedDateTime);
 
         return JWT.getEncoder().encode(jwt, signer);
@@ -92,7 +93,7 @@ public class JwtTokenProvider {
     private List<String> getRoleFromToken(String encodedJwt) {
 
         Map<String, Object> claims = getPayload(encodedJwt);
-        Object roleObj = claims.get("role");
+        Object roleObj = claims.get("authorities");
 
         // verifica si el valor del campo "role" es una lista
         if (roleObj instanceof List<?>) {

@@ -7,16 +7,24 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,10 +45,17 @@ public class SecurityConfig {
         return http.build();
     }
 
+
     @Bean
     public JwtValidationFilter jwtValidationFilter() {
         /* Proporciona una instancia de JwtValidationFilter que esté correctamente
         configurada y lista para ser utilizada en la cadena de filtros de seguridad.*/
         return new JwtValidationFilter(jwtTokenProvider);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        // Codifica y verifica contraseñas
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }

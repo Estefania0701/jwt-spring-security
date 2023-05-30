@@ -28,6 +28,6 @@ public class AuthController {
         validator.validate(paramMap, grantType);
 
         // llama al servicio para generar un token
-        return ResponseEntity.ok(authService.login(paramMap.getFirst("client_id"), paramMap.getFirst("client_secret")));
+        return ResponseEntity.ok(authService.login(paramMap.getFirst("client_id"), paramMap.getFirst("client_secret"), paramMap.getFirst("username")));
     }
 }

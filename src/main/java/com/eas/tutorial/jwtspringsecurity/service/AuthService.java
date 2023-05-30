@@ -1,12 +1,16 @@
 package com.eas.tutorial.jwtspringsecurity.service;
 
 import com.eas.tutorial.jwtspringsecurity.dto.JwtResponseDTO;
-import com.eas.tutorial.jwtspringsecurity.dto.UsuarioDTO;
+import com.eas.tutorial.jwtspringsecurity.dto.UserDTO;
+import com.eas.tutorial.jwtspringsecurity.model.User;
+import com.eas.tutorial.jwtspringsecurity.repository.UserRepository;
 import com.eas.tutorial.jwtspringsecurity.security.JwtTokenProvider;
 import com.eas.tutorial.jwtspringsecurity.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -15,21 +19,20 @@ public class AuthService {
     private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private DateUtil dateUtil;
 
     @Value("${eas.jwt.token.expired-in}")
     private int EXPIRED_IN;
 
-    public JwtResponseDTO login(String clientId, String clientSecret){
+    public JwtResponseDTO login(String clientId, String clientSecret, String username){
         // devuelve un token
 
-        UsuarioDTO user = UsuarioDTO.builder()
-                .name("Estefanía")
-                .lastname("Aguas")
-                .username("estefaaguas04")
-                .role("ROLE_ADMIN")
-                .country("Colombia")
-                .build();
+        Optional<User> userOptional = userRepository.findByUsername(username);
+
+        User user = userOptional.get();
 
         // objeto jwt
         JwtResponseDTO jwt = JwtResponseDTO.builder()

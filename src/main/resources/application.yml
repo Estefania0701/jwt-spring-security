@@ -21,7 +21,7 @@ eas:
 spring:
   datasource:
     driver-class-name: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-    url: "jdbc:sqlserver://springsecurity-server.database.windows.net:1433;encrypt=true;trustServerCertificate=false;loginTimeout=30;database=tutorial1;"
+    url: "jdbc:sqlserver://springsecurity-server.database.windows.net:1433;encrypt=true;trustServerCertificate=false;loginTimeout=30;database=prueba;"
     username: "estefaniaaguas@springsecurity-server"
     password: "Mocewi63*"
   jpa:
