@@ -1,16 +1,14 @@
 package com.eas.tutorial.jwtspringsecurity.validator;
 
 import com.eas.tutorial.jwtspringsecurity.exception.ApiUnauthorized;
-import com.eas.tutorial.jwtspringsecurity.model.User;
-import com.eas.tutorial.jwtspringsecurity.repository.UserRepository;
+import com.eas.tutorial.jwtspringsecurity.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Component
 public class AuthValidator {
@@ -18,26 +16,17 @@ public class AuthValidator {
     autenticación en una solicitud.*/
 
     @Autowired
-    private final UserRepository userRepository;
+    UserDetailsServiceImpl userDetailsService;
 
     @Autowired
-    private final UserDetailsService userDetailsService;
-
-    @Autowired
-    private final PasswordEncoder passwordEncoder;
-
-    public AuthValidator(UserRepository userRepository, UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.userDetailsService = userDetailsService;
-        this.passwordEncoder = passwordEncoder;
-    }
+    PasswordEncoder passwordEncoder;
 
     private static final String CLIENT_CREDENTIALS = "client_credentials";
 
     public void validate(MultiValueMap<String, String> paramMap, String grantType) throws ApiUnauthorized {
         //Valida los parámetros de autenticación. Lanza ApiUnauthorized si son inválidos
 
-        //validateClient(paramMap, grantType);
+        validateClient(paramMap, grantType);
         validateUser(paramMap);
     }
 
@@ -73,12 +62,9 @@ public class AuthValidator {
             throw new ApiUnauthorized("Credenciales de usuario inválidas");
         }
 
-        // si el username es incorrecto
-        Optional<User> userOptional = userRepository.findByUsername(username);
-        User user = userOptional.orElseThrow(() -> new ApiUnauthorized("Credenciales de usuario inválidas"));
-
-        // si la password es incorrecta
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        // si las credenciales son incorrectas
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new ApiUnauthorized("Credenciales de usuario inválidas");
         }
     }

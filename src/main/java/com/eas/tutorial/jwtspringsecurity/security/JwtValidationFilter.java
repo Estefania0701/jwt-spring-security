@@ -1,5 +1,6 @@
 package com.eas.tutorial.jwtspringsecurity.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,13 +15,10 @@ import java.io.IOException;
 
 public class JwtValidationFilter extends OncePerRequestFilter {
 
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
+
     private static final String AUTHORIZATION_HEADER_PREFIX = "Bearer ";
-
-    private final JwtTokenProvider jwtTokenProvider;
-
-    public JwtValidationFilter(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -28,12 +26,6 @@ public class JwtValidationFilter extends OncePerRequestFilter {
 
         // obtengo el string token
         String token = extractToken(request);
-
-        // --------------- BORRAR
-        if (token != null) {
-            System.out.println("Token expirado: " + jwtTokenProvider.tokenIsExpired(token));
-        }
-        // --------------- BORRAR
 
         // validar y autenticar el token jwt
         if (token != null && !jwtTokenProvider.tokenIsExpired(token)) {
@@ -47,7 +39,7 @@ public class JwtValidationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String extractToken(HttpServletRequest request) {
+    public String extractToken(HttpServletRequest request) {
         // extrae el token del encabezado de la solicitud
 
         String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);

@@ -1,12 +1,12 @@
 package com.eas.tutorial.jwtspringsecurity.security;
 
 import com.eas.tutorial.jwtspringsecurity.dto.UserDTO;
-import com.eas.tutorial.jwtspringsecurity.model.User;
-import com.eas.tutorial.jwtspringsecurity.util.UUIDGenerator;
+import com.eas.tutorial.jwtspringsecurity.util.SecretKeyGenerator;
 import io.fusionauth.jwt.JWTUtils;
 import io.fusionauth.jwt.Signer;
 import io.fusionauth.jwt.domain.JWT;
 import io.fusionauth.jwt.hmac.HMACSigner;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,6 +22,7 @@ public class JwtTokenProvider {
 
     // clave secreta
     @Value("${eas.jwt.token.secret:secret}") //lo que hay luego de los : es para asignar valores por defecto
+    //private String SECRET = SecretKeyGenerator.generateSecretKey();
     private String SECRET;
 
     @Value("${eas.jwt.timezone:UTC}")
@@ -36,8 +37,6 @@ public class JwtTokenProvider {
     public String generateToken(UserDTO user) {
         // crea el string del token y lo retorna
 
-        String sub = UUIDGenerator.generateUUID(); // identificador único de sesión
-
         // construcción de HMAC signer usando SHA-256
         Signer signer = HMACSigner.newSHA256Signer(SECRET);
 
@@ -48,7 +47,7 @@ public class JwtTokenProvider {
         JWT jwt = new JWT()
                 .setIssuer(ISSUER)
                 .setIssuedAt(ZonedDateTime.now(timeZone.toZoneId()))
-                .setSubject(sub)
+                .setSubject(user.getId().toString())
                 .addClaim("name", user.getName())
                 .addClaim("lastname", user.getLastname())
                 .addClaim("username", user.getUsername())
@@ -79,7 +78,7 @@ public class JwtTokenProvider {
         return jwt.getAllClaims();
     }
 
-    private String getSubFromToken(String encodedJwt) {
+    public String getSubFromToken(String encodedJwt) {
         // Devuelve el valor sub del payload
 
         Map<String, Object> claims = getPayload(encodedJwt);
@@ -88,7 +87,7 @@ public class JwtTokenProvider {
         return sub;
     }
 
-    private List<String> getRoleFromToken(String encodedJwt) {
+    public List<String> getRoleFromToken(String encodedJwt) {
 
         Map<String, Object> claims = getPayload(encodedJwt);
         Object roleObj = claims.get("authorities");
@@ -108,7 +107,7 @@ public class JwtTokenProvider {
 
     public Authentication createAuthentication(String encodedJwt) {
 
-        // obtengo el sub (uuid)
+        // obtengo el sub (id)
         String subject = getSubFromToken(encodedJwt);
 
         // obtengo el rol del JWT

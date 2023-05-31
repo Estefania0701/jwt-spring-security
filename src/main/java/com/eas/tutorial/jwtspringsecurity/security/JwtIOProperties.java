@@ -21,9 +21,6 @@ public class JwtIOProperties {
     // claims registradas del token
     private Token token;
 
-    // rutas exluidas del sistema de seguridad
-    private Excluded excluded;
-
     @Data
     public static class Security {
         private boolean enabled; // para activar o desactivar la seguridad de la app
@@ -41,10 +38,5 @@ public class JwtIOProperties {
         private String path; // endpoint para la autenticación
     }
 
-    @Data
-    public static class Excluded {
-        // para las rutas que he decidido que no requerirán autenticación
-        // no serán tenidas en cuenta por el sistema de seguridad
-        private String path;
-    }
+
 }

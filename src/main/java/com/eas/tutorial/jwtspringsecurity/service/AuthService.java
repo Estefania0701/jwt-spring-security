@@ -3,15 +3,11 @@ package com.eas.tutorial.jwtspringsecurity.service;
 import com.eas.tutorial.jwtspringsecurity.dto.JwtResponseDTO;
 import com.eas.tutorial.jwtspringsecurity.dto.UserDTO;
 import com.eas.tutorial.jwtspringsecurity.model.User;
-import com.eas.tutorial.jwtspringsecurity.repository.UserRepository;
 import com.eas.tutorial.jwtspringsecurity.security.JwtTokenProvider;
 import com.eas.tutorial.jwtspringsecurity.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -20,10 +16,10 @@ public class AuthService {
     private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    private UserRepository userRepository;
+    private DateUtil dateUtil;
 
     @Autowired
-    private DateUtil dateUtil;
+    private UserService userService;
 
     @Value("${eas.jwt.token.expired-in}")
     private int EXPIRED_IN;
@@ -31,9 +27,7 @@ public class AuthService {
     public JwtResponseDTO login(String clientId, String clientSecret, String username){
         // devuelve un token
 
-        Optional<User> userOptional = userRepository.findByUsername(username);
-
-        User userEntity = userOptional.orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+        User userEntity = userService.getUserByUsername(username);
 
         UserDTO user = new UserDTO(userEntity);
 

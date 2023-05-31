@@ -32,8 +32,10 @@ public class SecurityConfig {
 
         http
             .authorizeRequests()
-                .antMatchers("/demo/oauth/cliente_credential/accesstoken").permitAll() // Ruta de acceso público para la autenticación
-                .antMatchers("/demo/saludo").hasAuthority("ROLE_ADMIN") // Solo los usuarios con el rol "ROLE_ADMIN" pueden acceder
+                .antMatchers("/demo/oauth/cliente_credential/accesstoken").permitAll()
+                .antMatchers("/demo/saludo").hasAuthority("ROLE_USER")
+                .antMatchers("/demo/usuarios").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/demo/usuarios/{id}").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                 .and()
             .csrf()
                 .disable() // Deshabilitar la protección CSRF
@@ -49,7 +51,7 @@ public class SecurityConfig {
     public JwtValidationFilter jwtValidationFilter() {
         /* Proporciona una instancia de JwtValidationFilter que esté correctamente
         configurada y lista para ser utilizada en la cadena de filtros de seguridad.*/
-        return new JwtValidationFilter(jwtTokenProvider);
+        return new JwtValidationFilter();
     }
 
     @Bean

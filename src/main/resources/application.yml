@@ -12,18 +12,15 @@ eas:
     token:
       auth:
         path: "/demo/oauth/cliente_credential/accesstoken"
-      secret: "hola este esta es mi clave secreta jeje"
+      secret: "${APP_SECRET_KEY}" #variable de entorno
       expired-in: 60 #seconds
-    excluded:
-      path: "/demo/multi,/demo/otraexclusion" #ejemplos
-
 
 spring:
   datasource:
     driver-class-name: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
     url: "jdbc:sqlserver://springsecurity-server.database.windows.net:1433;encrypt=true;trustServerCertificate=false;loginTimeout=30;database=prueba;"
-    username: "estefaniaaguas@springsecurity-server"
-    password: "Mocewi63*"
+    username: "${APP_USERNAME_DB}"
+    password: "${APP_PASSWORD_DB}"
   jpa:
     properties:
       hibernate:
