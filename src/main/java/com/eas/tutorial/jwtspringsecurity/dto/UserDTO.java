@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -19,12 +20,11 @@ import java.util.List;
 @Component
 public class UserDTO implements Serializable {
 
-
     public UserDTO(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
-        this.authorities = user.getAuthorities();
+        this.authorities = (user.getAuthorities() != null) ? createListAuthorities(user.getAuthorities()) : null;
         this.name = user.getName();
         this.lastname = user.getLastname();
         this.country = user.getCountry();
@@ -33,8 +33,20 @@ public class UserDTO implements Serializable {
     private Long id;
     private String username;
     private String password;
-    private List<Authority> authorities;
+    private List<String> authorities;
     private String name;
     private String lastname;
     private String country;
+
+    private List<String> createListAuthorities(List<Authority> authorities) {
+
+        List<String> authoritiesString = new ArrayList<>();
+
+        for (Authority a : authorities) {
+            authoritiesString.add(a.getName().toString());
+        }
+
+        return authoritiesString;
+    }
+
 }

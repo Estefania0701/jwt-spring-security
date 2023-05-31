@@ -20,7 +20,7 @@ public class AuthController {
     private AuthValidator validator;
 
     // paramMap representa los datos enviados en el cuerpo de la solicitud (formulario)
-    // grantType para el método de autenticación y autorización (a través de las credenciales del cliente)
+    // grantType para el método de autenticación y autorización
     @PostMapping(value = "oauth/cliente_credential/accesstoken", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> login(@RequestBody MultiValueMap<String, String> paramMap, @RequestParam("grant_type") String grantType) throws ApiUnauthorized {
 

@@ -45,7 +45,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-
     @Bean
     public JwtValidationFilter jwtValidationFilter() {
         /* Proporciona una instancia de JwtValidationFilter que esté correctamente

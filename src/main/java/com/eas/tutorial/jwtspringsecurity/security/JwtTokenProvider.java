@@ -33,12 +33,10 @@ public class JwtTokenProvider {
     @Value("${eas.jwt.issuer:none}")
     private String ISSUER;
 
-    public String generateToken(User user) {
+    public String generateToken(UserDTO user) {
         // crea el string del token y lo retorna
 
         String sub = UUIDGenerator.generateUUID(); // identificador único de sesión
-
-        //String subject = GsonUtil.serialize(src);
 
         // construcción de HMAC signer usando SHA-256
         Signer signer = HMACSigner.newSHA256Signer(SECRET);
@@ -102,9 +100,6 @@ public class JwtTokenProvider {
             return roles.stream()
                     .map(Object::toString)
                     .collect(Collectors.toList());
-        } else if (roleObj != null) {
-            // si el valor no es una lista, lo convierte en una sola cadena y devuelve una lista con un solo elemento
-            return Collections.singletonList(roleObj.toString());
         }
 
         // si no se encuentra el campo "role" o es nulo, devuelve una lista vacía

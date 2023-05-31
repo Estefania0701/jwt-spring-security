@@ -8,6 +8,7 @@ import com.eas.tutorial.jwtspringsecurity.security.JwtTokenProvider;
 import com.eas.tutorial.jwtspringsecurity.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -32,7 +33,9 @@ public class AuthService {
 
         Optional<User> userOptional = userRepository.findByUsername(username);
 
-        User user = userOptional.get();
+        User userEntity = userOptional.orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+
+        UserDTO user = new UserDTO(userEntity);
 
         // objeto jwt
         JwtResponseDTO jwt = JwtResponseDTO.builder()
@@ -44,4 +47,6 @@ public class AuthService {
                 .build();
         return jwt;
     }
+
+
 }
